@@ -4,6 +4,7 @@
 ### RULES
 >The row R1 is nearest to the base line as mentioned in the figure ,the two players are you (human, say H) and the intelligent agent (machine, say M ). In this game,player H gets 8 blue colored coins and player M gets 8 green colored coins. A player places a coin in anyone column at a vacant row position while it is necessary to ensure that rows near the baseline should not be left vacant before a coin is placed . 
 
+![Board Image](github.com/vishalgolcha/Align3/read_img1.jpg)
 ### HOW CAN YOU WIN THE GAME ?
 
 >The two players take turn one by one and strategically place their coins to win. The player who achieves the alignment of the three coins wins while the alignment can be horizontal, vertical or diagonal. 
