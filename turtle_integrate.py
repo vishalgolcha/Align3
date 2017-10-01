@@ -28,6 +28,7 @@ raph   = turtle.Turtle()
 mikey  = turtle.Turtle()
 leo    = turtle.Turtle()
 donney = turtle.Turtle()
+sensei = turtle.Turtle()
 
 init_turtles(raph,donney,mikey,leo)
 leo.speed(10)
@@ -125,12 +126,23 @@ def gotoandprint(x, y):
     play.perma_set(fx,fy,2)
 
     play.recurse(game.x,game.y,1,1,1)
-# terminal check needed
-    play.perma_set(play.idx,play.idy,1)
-    print (play.idx,play.idy)
     ai_marker = grid_to_id[(play.idx,play.idy)]
     fill_square(squares[ai_marker],raph)
 
+# terminal check needed
+    play.sett(play.idx,play.idy,1)
+    if play.terminate(play.idx,play.idy)== True:
+    	# print "1 won"
+    	sensei.pu()
+    	sensei.goto(-300,300)
+    	sensei.pd()
+    	sensei.write("computer wins", font=("Arial",30, "normal"))
+    	time.sleep(10)
+    	turtle.bye() #check 
+
+    play.perma_set(play.idx,play.idy,1)
+    print (play.idx,play.idy)
+    
     # donney.pu()
     # donney.goto(x+50,y+60)
     print(leo.xcor(), leo.ycor())
@@ -147,9 +159,9 @@ fill_square(squares[2],raph)
 
 disp.onscreenclick(gotoandprint)
 
-z = turtle.getscreen()._root.mainloop()
+turtle.getscreen()._root.mainloop()
 
-print z
+# print z
 print "move"
 time.sleep(10)
 quit()

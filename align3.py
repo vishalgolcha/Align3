@@ -28,7 +28,7 @@ class grid_create :
     def perma_set(self,a,b,minmax):
         self.gs[a][b]= minmax*10 + minmax
         self.colm[b] = self.colm[b]+1 
-        
+
     def show_grid(self):
         print self.gs
         
@@ -67,7 +67,7 @@ class grid_create :
 #   resets the grid[a][b] to 1/2 depending on given minimax value in the current state of backtracking   
 
     def sett(self,a,b,minmax):
-        
+        # problem here rectify 
         if   minmax==1:
             self.gs[a][b]=1;
         elif minmax==2 :
