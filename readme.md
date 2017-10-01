@@ -1,3 +1,4 @@
+![Demo Game](https://github.com/vishalgolcha/Align3/blob/master/out10.gif)
 ## ALIGN-3 
 >A 4x4 board game is played by two players. The game is deterministic, turn taking, zero sumgame and can be named as align3. The board positions can be specified by the row numbers R1, R2, R3,and R4; and column numbers C1, C2, C3, C4. 
 
