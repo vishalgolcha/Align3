@@ -1,5 +1,7 @@
 import turtle 
-import time
+from time import time
+import align3 as game
+
 
 def init_turtles (raph,donney,mikey,leo):
 # 	TNMT FTW
@@ -18,8 +20,6 @@ def init_turtles (raph,donney,mikey,leo):
 	donney.shape("turtle")
 	donney.color("yellow")
 
-disp = turtle.Screen()
-disp.setup (width=700, height=700)
 
 raph   = turtle.Turtle() 
 mikey  = turtle.Turtle()
@@ -30,6 +30,7 @@ init_turtles(raph,donney,mikey,leo)
 leo.speed(10)
 squares=[]
 square_limits=[]
+
 def construct_square():
 	leo.fd(70) ;leo.lt(90)
 	leo.fd(70) ;leo.lt(90)
@@ -37,6 +38,7 @@ def construct_square():
 	leo.fd(70)
 
 def board_init():
+
 	for j in range(4):
 		for i in range(4):
 			leo.pu()
@@ -63,20 +65,6 @@ for i in range(16):
     grid_to_id[tuple(id_to_grid[i])]=i
 
 
-def draw_baseline():
-	mikey.pensize(4)
-	mikey.pu()
-	mikey.fd(20)
-	mikey.pd()
-	mikey.fd(280)
-	mikey.pu()
-	mikey.goto(200,-250)
-	mikey.pd()
-	mikey.fd(30);mikey.lt(90)
-	mikey.fd(30);mikey.lt(90)
-	mikey.fd(30);mikey.lt(90)
-	mikey.fd(30)
-# print squares
 def fill_square(i, turt):
 	turt.begin_fill()
 	for tx,ty in i :
@@ -103,38 +91,59 @@ break_flag=0
 def rect_chek(x,y):
 	flag=1
 	for j,i in enumerate(square_limits) : 
-		# print i
-		# print "-------------"
 		if x>= i[0][0] and x<=i[0][1] and y<=i[1][1] and y>=i[1][0]:
-			return j
-		# raph.end_fill()	
+			return j	
 
-def gotoandprint(x, y):
-    if x<0:
-    	break_flag =1
-    leo.pu()
+
+
+# z = turtle.getscreen()._root.mainloop()
+
+# print z
+# print "move"
+# time.sleep(10)
+# quit()
+play=game.grid_create()
+play.perma_set(0,2)
+posit= grid_to_id[(0,2)]
+fill_square(square[posit],raph)
+
+def func1(x, y):
     gotoresult = leo.goto(x, y)
-    # print squares
     marker = rect_chek(x,y)
-    print marker
+    # print marker
     fill_square(squares[marker],leo)
-    # donney.pu()
-    # donney.goto(x+50,y+60)
-    print(leo.xcor(), leo.ycor())
-
-    leo.pd()
+   	
+    # print(leo.xcor(), leo.ycor())
+    # leo.pd()
+    
+    play.recurse(game.x,game.y,1,1,1)
+    
+    ai_move = grid_to_id[(play.idx,play.idy)]
+    fill_square(square[ai_move],raph)
     return gotoresult
 
 
+def print_options():
+	print "1. Play with minimax"
+	print "2. Play with alpha beta"
+	print "3. Analyze"
+	print "4. End"
+	chosen = sys.stdin.readline()
+
+	if int(chosen)==1:
+		disp.onscreenclick(func1)
+	elif int(chosen)==2:
+		disp.onscreenclick(func2)
+	elif int(chosen)==4:
+		turtle.bye()
+	else:
+		print "analyzing"
+# print "\n"
+
+print "The game has been initialized"
 board_init()
-draw_baseline()
 
-disp.onscreenclick(gotoandprint)
+disp.listen()
 
-z = turtle.getscreen()._root.mainloop()
-
-print z
-print "move"
-time.sleep(10)
-quit()
-
+print_options()
+turtle.mainloop()

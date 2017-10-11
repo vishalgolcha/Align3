@@ -1,46 +1,41 @@
 import turtle 
 import time
 import align3 as game
+# object counter 
+oc = 0
+res= False
 # -----------------------
-play = game.grid_create()
 # ------------------------
-def init_turtles (raph,donney,mikey,leo):
+play   = None # will be initialised later 
+
+def init_turtles (tlist):
 # 	TNMT FTW
-	raph.shape("turtle")
-	raph.color("blue")
+	tlist[0].shape("turtle")
+	tlist[0].color("blue")
+
+	tlist[1].shape("turtle")
+	tlist[1].color("red")
 	
-	# mikey  = turtle.Turtle()
-	mikey.shape("turtle")
-	mikey.color("red")
-	
-	# leo    = turtle.Turtle()
-	leo.shape("turtle")
-	leo.color("green")
+	tlist[2].shape("turtle")
+	tlist[2].color("green")
 
-	# donney = turtle.Turtle()
-	donney.shape("turtle")
-	donney.color("yellow")
+	tlist[3].shape("turtle")
+	tlist[3].color("yellow")
 
-disp = turtle.Screen()
-disp.setup (width=700, height=700)
+	tlist[2].speed(100)
 
-raph   = turtle.Turtle() 
-mikey  = turtle.Turtle()
-leo    = turtle.Turtle()
-donney = turtle.Turtle()
-sensei = turtle.Turtle()
-
-init_turtles(raph,donney,mikey,leo)
-leo.speed(10)
 squares=[]
 square_limits=[]
+
+
+
 def construct_square(turt):
 	turt.fd(70) ;turt.lt(90)
 	turt.fd(70) ;turt.lt(90)
 	turt.fd(70) ;turt.lt(90)
 	turt.fd(70)
 
-def board_init():
+def board_init(leo,sensei):
 	for j in range(4):
 		for i in range(4):
 			leo.pu()
@@ -55,19 +50,22 @@ def board_init():
 			# print p
 			squares.append(p)
 			square_limits.append([[xxx,xxx+70],[yyy,yyy+70]])
+	sensei.pu()
+	sensei.goto(-300,300)
+	sensei.pd()
+	sensei.write("1. Do not click on already clicked moves . ", font=("Arial",10, "normal"))
+	sensei.pu()
+	sensei.goto(-300,260)
+	sensei.pd()	
+	sensei.write("2. Do not click outside the game box ", font=("Arial",10, "normal"))
+	sensei.pu()
+	sensei.goto(-300,220)
+	sensei.pd()	
+	sensei.write("until you want to exit. ", font=("Arial",10, "normal"))
 
-id_to_grid=[]
-grid_to_id={}
-
-for i in range(4):
-    for j in range(4):
-        id_to_grid.append([i,j])
-
-for i in range(16):
-    grid_to_id[tuple(id_to_grid[i])]=i
 
 
-def draw_baseline():
+def draw_baseline(mikey):
 	mikey.pensize(4)
 	mikey.pu()
 	mikey.fd(20)
@@ -82,6 +80,7 @@ def draw_baseline():
 	mikey.fd(30)
 
 def fill_square(i, turt):
+	turt.pu()
 	turt.begin_fill()
 	for tx,ty in i :
 		# print tx,ty	
@@ -89,8 +88,8 @@ def fill_square(i, turt):
 		turt.goto(tx,ty)
 
 	turt.end_fill()
-
-def board_wipe():
+	# turt.done()
+def board_wipe(raph):
 	for i in squares : 
 		raph.begin_fill()
 		for tx,ty in i:
@@ -113,14 +112,18 @@ def rect_chek(x,y):
 			return j
 		# raph.end_fill()	
 
-def gotoandprint(x, y):
+def gotoandprint(x,y):
     if x<0:
     	break_flag =1
-    leo.pu()
-    gotoresult = leo.goto(x, y)
+    # leo.pu()
+
     # print squares
     marker = rect_chek(x,y)
-    print marker
+    leo=turtle.Turtle();leo.shape(None);leo.color("green")
+    leo.pu()
+    gotoresult = leo.goto(x, y)
+    raph=turtle.Turtle();raph.shape(None);raph.color("blue")
+    # print marker
     fill_square(squares[marker],leo)
     fx,fy=id_to_grid[marker]
     play.perma_set(fx,fy,2)
@@ -133,36 +136,68 @@ def gotoandprint(x, y):
     play.sett(play.idx,play.idy,1)
     if play.terminate(play.idx,play.idy)== True:
     	# print "1 won"
+    	sensei = turtle.Turtle()
     	sensei.pu()
-    	sensei.goto(-300,300)
+    	sensei.goto(-300,100)
     	sensei.pd()
-    	sensei.write("computer wins", font=("Arial",30, "normal"))
-    	time.sleep(10)
-    	turtle.bye() #check 
+    	sensei.write("computer wins", font=("Arial",10, "normal"))
+    	global res
+    	res= True
+    	time.sleep(5)
+    	# disp.bye() #check
+    	turtle.bye() 
 
     play.perma_set(play.idx,play.idy,1)
-    print (play.idx,play.idy)
+    # print (play.idx,play.idy)
     
     # donney.pu()
     # donney.goto(x+50,y+60)
-    print(leo.xcor(), leo.ycor())
+    # print(leo.xcor(), leo.ycor())
 
     # leo.pd()
     return gotoresult
 
-play.perma_set(0,2,1)
-board_init()
-draw_baseline()
+def play_game(opt):
+	global oc
+	square_limits[:]=[]
+	squares[:]=[]
+# -----------------------------------
+	disp = turtle.Screen()
+	disp.setup (width=700, height=700)
+# --------------------------------------
+	
+# 	raph=None;mikey=None;leo=None;donney=None;sensei=None
+	tlist=[]
+	for i in range(5):
+		# print oc 
+		locals()['turt_{0}'.format(oc)]=turtle.Turtle()
+		tlist.append(locals()['turt_'+str(oc)])
+		oc=oc+1
+	# ----------------------------------------
+	init_turtles(tlist)
+# --------------------------------------
+	
+	global play
+	global res
+	play = game.grid_create()
+	board_init(tlist[2],tlist[4])
+	play.perma_set(0,2,1)
+	draw_baseline(tlist[1])
+	fill_square(squares[2],tlist[0])
+	
+	# if res== True:
+	# 	res=False
+		# disp.bye()
 
-fill_square(squares[2],raph)
+	disp.onscreenclick(gotoandprint)
 
+	turtle.getscreen()._root.mainloop()
+	for i in tlist :
+		del i
+# 	# print z
+	
+	# time.sleep(5)
+	print "move"
+	# disp.bye()
 
-disp.onscreenclick(gotoandprint)
-
-turtle.getscreen()._root.mainloop()
-
-# print z
-print "move"
-time.sleep(10)
-quit()
 
